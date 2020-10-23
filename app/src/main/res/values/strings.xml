@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Countries</string>
+
+    <string name="action_search">Search</string>
+    <string name="search_hint">Country or Capital</string>
+
+    <string name="name">%s</string>
+    <string name="native_name">Native Name: %s</string>
+    <string name="capital">%s</string>
+    <string name="population">%s</string>
+    <string name="region">Region: %s, %s</string>
+    <string name="area">%skm²</string>
+    <string name="calling_codes">Calling Codes: +%s</string>
+    <string name="time_zones">Time Zones: %s</string>
+    <string name="borders">Borders: %s</string>
+    <string name="languages">Languages: %s %s</string>
+    <string name="currencies">Currencies: %s - %s(%s)</string>
+</resources>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_close"
+        app:title="Details" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <ImageView
+                android:id="@+id/imageViewFlag"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="TODO"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_turkey_flag" />
+
+            <TextView
+                android:id="@id/textViewCapital"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/textViewPopulation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewFlag"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Ankara" />
+
+            <TextView
+                android:id="@+id/textViewPopulation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/textViewArea"
+                app:layout_constraintEnd_toEndOf="@+id/textViewCapital"
+                app:layout_constraintStart_toStartOf="@+id/textViewCapital"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCapital"
+                tools:text="78,741,053" />
+
+
+            <TextView
+                android:id="@+id/textViewArea"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline"
+                app:layout_constraintEnd_toEndOf="@+id/textViewPopulation"
+                app:layout_constraintStart_toStartOf="@+id/textViewPopulation"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPopulation"
+                tools:text="783,562km²" />
+
+            <TextView
+                android:id="@+id/textViewNativeName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline"
+                tools:text="Native Name: Türkiye" />
+
+            <TextView
+                android:id="@+id/textViewRegion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewNativeName"
+                app:layout_constraintStart_toStartOf="@+id/textViewNativeName"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNativeName"
+                tools:text="Region: Asia, Western Asia" />
+
+            <TextView
+                android:id="@+id/textViewCallingCodes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewTimeZones"
+                app:layout_constraintStart_toStartOf="@+id/textViewTimeZones"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTimeZones"
+                tools:text="Calling Codes: 90" />
+
+            <TextView
+                android:id="@+id/textViewTimeZones"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewRegion"
+                app:layout_constraintStart_toStartOf="@+id/textViewRegion"
+                app:layout_constraintTop_toBottomOf="@+id/textViewRegion"
+                tools:text="Timezones: UTC+3:00" />
+
+            <TextView
+                android:id="@+id/textViewBorders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewLanguages"
+                app:layout_constraintStart_toStartOf="@+id/textViewLanguages"
+                app:layout_constraintTop_toBottomOf="@+id/textViewLanguages"
+                tools:text="Borders: \nARM\nAZE\nBGR\nGEO\nGRC\nIRN\nIRQ\nSYR" />
+
+            <TextView
+                android:id="@+id/textViewLanguages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewCurrencies"
+                app:layout_constraintStart_toStartOf="@+id/textViewCurrencies"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCurrencies"
+                tools:text="Languages: Turkish (Türkçe)" />
+
+            <TextView
+                android:id="@+id/textViewCurrencies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textViewCallingCodes"
+                app:layout_constraintStart_toStartOf="@+id/textViewCallingCodes"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCallingCodes"
+                tools:text="Currencies: TRY - Turkish Lira - ₺" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="120dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
