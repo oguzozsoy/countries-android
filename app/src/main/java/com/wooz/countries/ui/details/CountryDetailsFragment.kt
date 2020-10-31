@@ -3,9 +3,11 @@ package com.wooz.countries.ui.details
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.wooz.countries.R
@@ -22,12 +24,14 @@ import java.text.NumberFormat
  */
 @AndroidEntryPoint
 class CountryDetailsFragment :
-    BaseDialogFragment<CountryDetailsViewModel, FragmentCountryDetailsBinding>() {
+    BaseDialogFragment<CountryDetailsViewModel, FragmentCountryDetailsBinding>(),
+    Toolbar.OnMenuItemClickListener {
 
     override val layoutRes: Int = R.layout.fragment_countries
     override val viewModel: CountryDetailsViewModel by viewModels()
 
     private lateinit var mFavoriteCheckbox: CheckBox
+    private lateinit var mCountry: Country
 
     companion object {
         const val TAG = "CountryDetailsFragment"
@@ -57,6 +61,7 @@ class CountryDetailsFragment :
     override fun viewCreated(view: View, savedInstanceState: Bundle?) {
         binding.toolbar.setNavigationOnClickListener { dismiss() }
         binding.toolbar.inflateMenu(R.menu.menu_country_details)
+        binding.toolbar.setOnMenuItemClickListener(this)
 
         val startMenuItem = binding.toolbar.menu.findItem(R.id.action_favorite)
         mFavoriteCheckbox = startMenuItem.actionView as CheckBox
@@ -115,7 +120,8 @@ class CountryDetailsFragment :
         viewModel.country.observe(viewLifecycleOwner, {
             when (it) {
                 is ResultData.Success -> {
-                    setFavoriteToggle(mFavoriteCheckbox, it.data!!)
+                    mCountry = it.data!!
+                    setFavoriteToggle(mFavoriteCheckbox, mCountry)
                 }
                 is ResultData.Loading -> {
                 }
@@ -133,10 +139,25 @@ class CountryDetailsFragment :
         checkBox.isChecked = country.favorite
     }
 
+    private fun deleteCountry() {
+        viewModel.deleteCountry(mCountry)
+        dismiss()
+    }
+
     override fun setBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentCountryDetailsBinding {
         return FragmentCountryDetailsBinding.inflate(inflater, container, false)
+    }
+
+    override fun onMenuItemClick(p0: MenuItem?): Boolean {
+        return when (p0?.itemId) {
+            R.id.action_delete -> {
+                deleteCountry()
+                true
+            }
+            else -> false
+        }
     }
 }

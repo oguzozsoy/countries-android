@@ -31,5 +31,6 @@ class CountryLocalDataSourceImpl @Inject constructor(private val countryDao: Cou
         countryDao.getCountryByCode(code)
 
     override suspend fun updateCountry(country: CountryDto): Int = countryDao.updateCountry(country)
+    override suspend fun deleteCountry(country: CountryDto): Int = countryDao.deleteCountry(country)
 
 }

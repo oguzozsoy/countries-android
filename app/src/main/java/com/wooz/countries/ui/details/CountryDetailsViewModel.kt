@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.wooz.countries.domain.entity.Country
 import com.wooz.countries.domain.entity.CountryDetails
 import com.wooz.countries.domain.entity.ResultData
+import com.wooz.countries.domain.usercase.DeleteCountryUseCase
 import com.wooz.countries.domain.usercase.GetCountryByCodeUseCase
 import com.wooz.countries.domain.usercase.GetCountryDetailsByCodeUseCase
 import com.wooz.countries.domain.usercase.UpdateCountryUseCase
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 class CountryDetailsViewModel @ViewModelInject constructor(
     private val getCountryDetailsByCodeUseCase: GetCountryDetailsByCodeUseCase,
     private val getCountryByCodeUseCase: GetCountryByCodeUseCase,
-    private val updateCountryUseCase: UpdateCountryUseCase
+    private val updateCountryUseCase: UpdateCountryUseCase,
+    private val deleteCountryUseCase: DeleteCountryUseCase
 ) :
     BaseViewModel() {
     private val _countryDetails = MutableLiveData<ResultData<CountryDetails>>()
@@ -53,5 +55,9 @@ class CountryDetailsViewModel @ViewModelInject constructor(
 
     fun updateCountry(country: Country) = viewModelScope.launch {
         updateCountryUseCase.invoke(country)
+    }
+
+    fun deleteCountry(country: Country) = viewModelScope.launch {
+        deleteCountryUseCase.invoke(country)
     }
 }

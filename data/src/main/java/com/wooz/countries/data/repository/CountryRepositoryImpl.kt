@@ -111,4 +111,9 @@ class CountryRepositoryImpl @Inject constructor(
         val numberOfRowsUpdated = localDataSource.updateCountry(countryMapper.mapToDto(country))
         return if (numberOfRowsUpdated == 0) ResultData.Failed("Country Not Found") else ResultData.Success()
     }
+
+    override suspend fun deleteCountry(country: Country): ResultData<Unit> {
+        val numberOfRowsDeleted = localDataSource.deleteCountry(countryMapper.mapToDto(country))
+        return if (numberOfRowsDeleted == 0) ResultData.Failed("Country Not Found") else ResultData.Success()
+    }
 }

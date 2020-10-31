@@ -14,4 +14,5 @@ interface CountryRepository {
     fun getCountryDetailsByCode(code: String): Flow<ResultData<CountryDetails>>
     fun getCountryByCode(code: String): Flow<ResultData<Country>>
     suspend fun updateCountry(country: Country): ResultData<Unit>
+    suspend fun deleteCountry(country: Country): ResultData<Unit>
 }

@@ -32,4 +32,7 @@ abstract class CountryDao {
 
     @Update
     abstract suspend fun updateCountry(country: CountryDto): Int
+
+    @Delete
+    abstract suspend fun deleteCountry(country: CountryDto): Int
 }
