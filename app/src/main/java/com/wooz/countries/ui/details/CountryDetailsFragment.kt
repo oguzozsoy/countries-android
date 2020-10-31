@@ -2,15 +2,15 @@ package com.wooz.countries.ui.details
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.wooz.countries.R
 import com.wooz.countries.databinding.FragmentCountryDetailsBinding
+import com.wooz.countries.domain.entity.Country
 import com.wooz.countries.domain.entity.ResultData
 import com.wooz.countries.ui.common.BaseDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,8 +23,11 @@ import java.text.NumberFormat
 @AndroidEntryPoint
 class CountryDetailsFragment :
     BaseDialogFragment<CountryDetailsViewModel, FragmentCountryDetailsBinding>() {
+
     override val layoutRes: Int = R.layout.fragment_countries
     override val viewModel: CountryDetailsViewModel by viewModels()
+
+    private lateinit var mFavoriteCheckbox: CheckBox
 
     companion object {
         const val TAG = "CountryDetailsFragment"
@@ -40,8 +43,32 @@ class CountryDetailsFragment :
         }
     }
 
+    private fun setFlag(flag: String) {
+        val requestBuilder = GlideToVectorYou
+            .init()
+            .with(context)
+            .requestBuilder
+
+        requestBuilder
+            .load(Uri.parse(flag))
+            .into(binding.imageViewFlag)
+    }
+
+    override fun viewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.toolbar.setNavigationOnClickListener { dismiss() }
+        binding.toolbar.inflateMenu(R.menu.menu_country_details)
+
+        val startMenuItem = binding.toolbar.menu.findItem(R.id.action_favorite)
+        mFavoriteCheckbox = startMenuItem.actionView as CheckBox
+
+        arguments?.getString(COUNTRY_CODE)?.let {
+            viewModel.fetchCountryDetails(it)
+            viewModel.fetchCountry(it)
+        }
+    }
+
     override fun observeViewModel() {
-        viewModel.countryDetails.observe(viewLifecycleOwner, Observer {
+        viewModel.countryDetails.observe(viewLifecycleOwner, {
             when (it) {
                 is ResultData.Success -> {
                     val country = it.data!!
@@ -78,27 +105,32 @@ class CountryDetailsFragment :
                         country.currencies[0].symbol
                     )
                 }
+                is ResultData.Loading -> {
+                }
+                is ResultData.Failed -> {
+                }
+            }
+        })
+
+        viewModel.country.observe(viewLifecycleOwner, {
+            when (it) {
+                is ResultData.Success -> {
+                    setFavoriteToggle(mFavoriteCheckbox, it.data!!)
+                }
+                is ResultData.Loading -> {
+                }
+                is ResultData.Failed -> {
+                }
             }
         })
     }
 
-    private fun setFlag(flag: String) {
-        val requestBuilder = GlideToVectorYou
-            .init()
-            .with(context)
-            .requestBuilder
-
-        requestBuilder
-            .load(Uri.parse(flag))
-            .into(binding.imageViewFlag)
-    }
-
-    override fun viewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.toolbar.setNavigationOnClickListener { dismiss() }
-
-        arguments?.getString(COUNTRY_CODE)?.let {
-            viewModel.fetchCountryDetails(it)
+    private fun setFavoriteToggle(checkBox: CheckBox, country: Country) {
+        checkBox.setOnCheckedChangeListener { _, b ->
+            country.favorite = b
+            viewModel.updateCountry(country)
         }
+        checkBox.isChecked = country.favorite
     }
 
     override fun setBinding(

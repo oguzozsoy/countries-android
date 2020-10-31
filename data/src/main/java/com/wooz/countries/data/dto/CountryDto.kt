@@ -30,9 +30,5 @@ data class CountryDto(
 
     @ColumnInfo(name = "favorite")
     @Expose(serialize = false, deserialize = false)
-    var favorite: Boolean = false,
-
-    @ColumnInfo(name = "updated_at")
-    @Expose(serialize = false, deserialize = false)
-    var updatedAt: Long = 0L
+    var favorite: Boolean = false
 )

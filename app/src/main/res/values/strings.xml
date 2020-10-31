@@ -15,4 +15,5 @@
     <string name="borders">Borders: %s</string>
     <string name="languages">Languages: %s %s</string>
     <string name="currencies">Currencies: %s - %s(%s)</string>
+    <string name="favorite">Favorite</string>
 </resources>

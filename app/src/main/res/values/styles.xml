@@ -17,4 +17,8 @@
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
+    
+    <style name="StarCheckbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/ic_favorite_selector</item>
+    </style>
 </resources>

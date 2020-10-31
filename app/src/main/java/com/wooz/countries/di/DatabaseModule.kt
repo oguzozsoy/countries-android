@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
 
 /**
  * @author wooz
@@ -18,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 @Module
 object DatabaseModule {
     @Provides
+    @Singleton
     fun providesCountryDatabase(@ApplicationContext context: Context): CountryDatabase {
         return Room
             .databaseBuilder(context, CountryDatabase::class.java, "country.db")
@@ -26,6 +28,7 @@ object DatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun providesCountryDao(countryDatabase: CountryDatabase): CountryDao {
         return countryDatabase.countryDao()
     }

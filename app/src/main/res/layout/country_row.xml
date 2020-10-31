@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
-    android:padding="16dp"
-    android:id="@+id/contianer">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/imageViewFlag"
@@ -16,7 +16,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textViewName"
@@ -24,17 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:autoSizeTextType="uniform"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textViewCapital"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewFavorite"
         app:layout_constraintStart_toEndOf="@+id/imageViewFlag"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Turkey"
-        android:autoSizeTextType="uniform"/>
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/textViewCapital"
@@ -48,5 +50,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewName"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Ankara" />
+
+    <ImageView
+        android:id="@+id/imageViewFavorite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="4dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ class CountryRepositoryImpl @Inject constructor(
             }
 
             override fun shouldFetch(data: List<CountryDto>?): Boolean {
-                return data.isNullOrEmpty() || System.currentTimeMillis() - data[0].updatedAt > TimeUnit.DAYS.toMillis(360)
+                return data.isNullOrEmpty()
             }
 
             override fun loadFromDb(): Flow<List<CountryDto>> {
@@ -93,5 +93,22 @@ class CountryRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override fun getCountryByCode(code: String): Flow<ResultData<Country>> = flow{
+        emit(ResultData.Loading())
+        val country = localDataSource.getCountryByCode(code)
+        country.collect{
+            if(it == null){
+                emit(ResultData.Failed("Country not found"))
+            }else{
+                emit(ResultData.Success(countryMapper.mapToEntity(it)))
+            }
+        }
+    }
+
+    override suspend fun updateCountry(country: Country): ResultData<Unit> {
+        val numberOfRowsUpdated = localDataSource.updateCountry(countryMapper.mapToDto(country))
+        return if (numberOfRowsUpdated == 0) ResultData.Failed("Country Not Found") else ResultData.Success()
     }
 }

@@ -14,7 +14,6 @@ import com.wooz.countries.R
 import com.wooz.countries.databinding.CountryRowBinding
 import com.wooz.countries.domain.entity.Country
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -35,7 +34,7 @@ class CountryAdapter constructor(
 
     fun swapData(countries: List<Country>) {
         this.countries.clear()
-        this.countries.addAll(countries)
+        this.countries.addAll(countries.sortedByDescending { it.favorite })
         notifyDataSetChanged()
     }
 
@@ -49,9 +48,9 @@ class CountryAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val country = countriesFiltered[position]
 
-        holder.binding.textViewName.text =
+        holder.textViewName.text =
             String.format(Locale.getDefault(), "%s", country.name)
-        holder.binding.textViewCapital.text = country.capital
+        holder.textViewCapital.text = country.capital
 
         val requestBuilder = GlideToVectorYou
             .init()
@@ -60,44 +59,57 @@ class CountryAdapter constructor(
 
         requestBuilder
             .load(Uri.parse(country.flag))
-            .into(holder.binding.imageViewFlag)
+            .into(holder.imageViewFlag)
 
-        holder.binding.contianer.setOnClickListener {
+        holder.imageViewFavorite.setImageResource(
+            if (country.favorite) {
+                R.drawable.ic_baseline_star_24
+            } else {
+                R.drawable.ic_baseline_star_border_24
+            }
+        )
+
+        holder.container.setOnClickListener {
             listener?.invoke(country)
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding = CountryRowBinding.bind(itemView)
+        private val binding = CountryRowBinding.bind(itemView)
+        val textViewName = binding.textViewName
+        val textViewCapital = binding.textViewCapital
+        val imageViewFlag = binding.imageViewFlag
+        val container = binding.container
+        val imageViewFavorite = binding.imageViewFavorite
     }
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 Log.i(TAG, "performFiltering: $constraint")
+
                 val charString: String = constraint.toString()
+
                 countriesFiltered = if (charString.isEmpty()) {
-                    countries
+                    countries.toMutableList()
                 } else {
-                    val filteredList: ArrayList<Country> = ArrayList()
-                    for (row: Country in countries) {
-                        if (row.name.toLowerCase().contains(charString.toLowerCase()) ||
-                            row.capital.toLowerCase().contains(charString.toLowerCase())
-                        ) {
-                            filteredList.add(row)
-                        }
-                    }
-                    filteredList
+                    countries.filter {
+                        it.name.toLowerCase(Locale.getDefault())
+                            .contains(charString.toLowerCase(Locale.getDefault()))
+                                || it.capital.toLowerCase(Locale.getDefault())
+                            .contains(charString.toLowerCase(Locale.getDefault()))
+                    }.toMutableList()
+
                 }
 
-                val filterResults = FilterResults()
-                filterResults.values = countriesFiltered
-                return filterResults
+                countriesFiltered.sortByDescending { it.favorite }
+                return FilterResults().apply {
+                    values = countriesFiltered
+                    count = countriesFiltered.size
+                }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                Log.i(TAG, "publishResults: $constraint")
-                countriesFiltered = results?.values as ArrayList<Country>
                 notifyDataSetChanged()
             }
         }

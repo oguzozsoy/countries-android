@@ -1,9 +1,6 @@
 package com.wooz.countries.data.framework.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.wooz.countries.data.dto.CountryDetailsDto
 import com.wooz.countries.data.dto.CountryDto
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class CountryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertAllCountriesWithTimeStamp(items: List<CountryDto>)
+    abstract suspend fun insertAllCountries(items: List<CountryDto>)
 
     @Query("select * from country")
     abstract fun getAllCountries(): Flow<List<CountryDto>>
@@ -26,14 +23,13 @@ abstract class CountryDao {
     @Query("select * from country_details where code= :code")
     abstract fun getCountryDetailsByCode(code: String): Flow<CountryDetailsDto>
 
-    suspend fun insertAllCountries(items: List<CountryDto>) {
-        insertAllCountriesWithTimeStamp(items.map {
-            it.updatedAt = System.currentTimeMillis()
-            it
-        })
-    }
-
     suspend fun insertCountryDetails(item: CountryDetailsDto) {
         insertCountryDetailsWithTimeStamp(item.apply { updatedAt = System.currentTimeMillis() })
     }
+
+    @Query("select * from country where code= :code")
+    abstract fun getCountryByCode(code: String): Flow<CountryDto>
+
+    @Update
+    abstract suspend fun updateCountry(country: CountryDto): Int
 }

@@ -14,4 +14,6 @@ interface CountryLocalDataSource {
     suspend fun insertAllCountries(items: List<CountryDto>)
     fun getCountryDetailsByCode(code: String): Flow<CountryDetailsDto>
     suspend fun insertCountryDetails(country: CountryDetailsDto)
+    fun getCountryByCode(code: String): Flow<CountryDto?>
+    suspend fun updateCountry(country: CountryDto): Int
 }
