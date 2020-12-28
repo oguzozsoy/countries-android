@@ -2,7 +2,6 @@ package com.wooz.countries.data.repository
 
 import com.wooz.countries.data.dto.CountryDetailsDto
 import com.wooz.countries.data.dto.CountryDto
-import com.wooz.countries.domain.entity.CountryDetails
 import kotlinx.coroutines.flow.Flow
 
 /**

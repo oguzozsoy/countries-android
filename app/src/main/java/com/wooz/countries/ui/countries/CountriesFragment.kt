@@ -7,20 +7,19 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.wooz.countries.MainActivity
 import com.wooz.countries.R
 import com.wooz.countries.databinding.FragmentCountriesBinding
 import com.wooz.countries.domain.entity.Country
 import com.wooz.countries.domain.entity.ResultData
 import com.wooz.countries.ui.common.BaseFragment
-import dagger.hilt.android.AndroidEntryPoint
-import androidx.navigation.fragment.findNavController
-import com.wooz.countries.MainActivity
 import com.wooz.countries.ui.details.CountryDetailsFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
@@ -48,7 +47,7 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
     }
 
     override fun observeViewModel() {
-        viewModel.countries.observe(viewLifecycleOwner, Observer {
+        viewModel.countries.observe(viewLifecycleOwner,  {
             when (it) {
                 is ResultData.Success -> {
                     adapter.swapData(it.data!! as ArrayList<Country>)
@@ -94,8 +93,8 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
         val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager?
         searchView = menu.findItem(R.id.action_search).actionView as SearchView
 
-        searchView.setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName));
-        searchView.maxWidth = Integer.MAX_VALUE;
+        searchView.setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
+        searchView.maxWidth = Integer.MAX_VALUE
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

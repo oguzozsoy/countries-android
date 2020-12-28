@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
 import com.wooz.countries.R
 import com.wooz.countries.domain.entity.ResultData
@@ -52,7 +50,7 @@ abstract class BaseDialogFragment<T : BaseViewModel, B : ViewBinding> : DialogFr
         savedInstanceState: Bundle?
     ): View? {
         this._binding = this.setBinding(inflater, container)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -68,7 +66,7 @@ abstract class BaseDialogFragment<T : BaseViewModel, B : ViewBinding> : DialogFr
     }
 
     private fun observeLoadingAndError() {
-        viewModel.loadingErrorState.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingErrorState.observe(viewLifecycleOwner,  {
             when (it) {
                 is ResultData.Loading -> {
                     showLoading()
