@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="country"
+            type="com.wooz.countries.domain.entity.Country" />
+
+        <variable
+            name="clickListener"
+            type="com.wooz.countries.ui.countries.CountryClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:padding="16dp"
+        android:onClick="@{() -> clickListener.onClick(country)}">
+
+        <ImageView
+            android:id="@+id/imageViewFlag"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            flag="@{country}"/>
+
+        <TextView
+            android:id="@+id/textViewName"
+            name="@{country}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeTextType="uniform"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewCapital"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewFavorite"
+            app:layout_constraintStart_toEndOf="@+id/imageViewFlag"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:ignore="UnusedAttribute"
+            tools:text="Turkey" />
+
+        <TextView
+            android:id="@+id/textViewCapital"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textViewName"
+            app:layout_constraintStart_toStartOf="@+id/textViewName"
+            app:layout_constraintTop_toBottomOf="@+id/textViewName"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Ankara"
+            capital="@{country}"/>
+
+        <ImageView
+            android:id="@+id/imageViewFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            favorite="@{country}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

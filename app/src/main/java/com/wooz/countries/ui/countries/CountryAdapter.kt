@@ -1,17 +1,12 @@
 package com.wooz.countries.ui.countries
 
-import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
-import com.wooz.countries.R
-import com.wooz.countries.databinding.CountryRowBinding
+import com.wooz.countries.databinding.ItemCountryBinding
 import com.wooz.countries.domain.entity.Country
 import java.util.*
 
@@ -20,67 +15,45 @@ import java.util.*
  * @author wooz
  * @since 10/10/2020
  */
-class CountryAdapter constructor(
-    private val countries: MutableList<Country>,
-    private val context: Context?
-) : RecyclerView.Adapter<CountryAdapter.ViewHolder>(), Filterable {
+class CountryAdapter(private val clickListener: CountryClickListener) :
+    RecyclerView.Adapter<CountryAdapter.ViewHolder>(), Filterable {
 
-    private var countriesFiltered = countries
+    var data = listOf<Country>()
+        set(value) {
+            field = value.sortedByDescending { it.favorite }
+            countriesFiltered = data
+            notifyDataSetChanged()
+        }
 
-    private var listener: ((Country) -> Unit)? = null
-    fun setItemClickListener(listener: ((Country) -> Unit)) {
-        this.listener = listener
-    }
-
-    fun swapData(countries: List<Country>) {
-        this.countries.clear()
-        this.countries.addAll(countries.sortedByDescending { it.favorite })
-        notifyDataSetChanged()
-    }
+    private var countriesFiltered = data
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.country_row, parent, false)
-        return ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
     override fun getItemCount(): Int = countriesFiltered.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val country = countriesFiltered[position]
-
-        holder.textViewName.text =
-            String.format(Locale.getDefault(), "%s", country.name)
-        holder.textViewCapital.text = country.capital
-
-        val requestBuilder = GlideToVectorYou
-            .init()
-            .with(context)
-            .requestBuilder
-
-        requestBuilder
-            .load(Uri.parse(country.flag))
-            .into(holder.imageViewFlag)
-
-        holder.imageViewFavorite.setImageResource(
-            if (country.favorite) {
-                R.drawable.ic_baseline_star_24
-            } else {
-                R.drawable.ic_baseline_star_border_24
-            }
-        )
-
-        holder.container.setOnClickListener {
-            listener?.invoke(country)
-        }
+        holder.bind(clickListener, country)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = CountryRowBinding.bind(itemView)
-        val textViewName = binding.textViewName
-        val textViewCapital = binding.textViewCapital
-        val imageViewFlag = binding.imageViewFlag
-        val container = binding.container
-        val imageViewFavorite = binding.imageViewFavorite
+    class ViewHolder private constructor(private val binding: ItemCountryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(clickListener: CountryClickListener, item: Country) {
+            binding.country = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemCountryBinding.inflate(layoutInflater, parent, false)
+
+                return ViewHolder(binding)
+            }
+        }
     }
 
     override fun getFilter(): Filter {
@@ -91,9 +64,9 @@ class CountryAdapter constructor(
                 val charString: String = constraint.toString()
 
                 countriesFiltered = if (charString.isEmpty()) {
-                    countries.toMutableList()
+                    data.toMutableList()
                 } else {
-                    countries.filter {
+                    data.filter {
                         it.name.toLowerCase(Locale.getDefault())
                             .contains(charString.toLowerCase(Locale.getDefault()))
                                 || it.capital.toLowerCase(Locale.getDefault())
@@ -102,7 +75,7 @@ class CountryAdapter constructor(
 
                 }
 
-                countriesFiltered.sortByDescending { it.favorite }
+                (countriesFiltered as MutableList<Country>).sortByDescending { it.favorite }
                 return FilterResults().apply {
                     values = countriesFiltered
                     count = countriesFiltered.size
@@ -118,4 +91,8 @@ class CountryAdapter constructor(
     companion object {
         private const val TAG = "CountryAdapter"
     }
+}
+
+class CountryClickListener(val clickListener: (code: String) -> Unit) {
+    fun onClick(country: Country) = clickListener(country.code)
 }

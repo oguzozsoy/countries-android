@@ -4,7 +4,10 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -39,18 +42,11 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
         private const val TAG = "CountriesFragment"
     }
 
-    override fun setBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentCountriesBinding {
-        return FragmentCountriesBinding.inflate(inflater, container, false)
-    }
-
     override fun observeViewModel() {
         viewModel.countries.observe(viewLifecycleOwner,  {
             when (it) {
                 is ResultData.Success -> {
-                    adapter.swapData(it.data!! as ArrayList<Country>)
+                    adapter.data = it.data!! as ArrayList<Country>
                 }
                 is ResultData.Failed -> {
                     Log.e(TAG, "observeViewModel: ${it.error}")
@@ -76,13 +72,11 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
             )
         )
 
-        adapter = CountryAdapter(mutableListOf(), context)
-        binding.recyclerViewCountries.adapter = adapter
-        adapter.setItemClickListener {
-            CountryDetailsFragment.newInstance(it.code)
+        adapter = CountryAdapter(CountryClickListener { code ->
+            CountryDetailsFragment.newInstance(code)
                 .show(requireActivity().supportFragmentManager, CountryDetailsFragment.TAG)
-        }
-
+        })
+        binding.recyclerViewCountries.adapter = adapter
         viewModel.fetchCountries()
     }
 
@@ -119,5 +113,9 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    override fun initBinding() {
+
     }
 }
