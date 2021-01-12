@@ -63,12 +63,11 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
 
         navController = findNavController()
 
-        binding.recyclerViewCountries.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewCountries.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                RecyclerView.VERTICAL
+            CountriesItemDecoration(
+                requireContext(),
+                RecyclerView.VERTICAL,
+                32
             )
         )
 
