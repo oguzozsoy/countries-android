@@ -24,7 +24,7 @@ abstract class BaseFragment<T : BaseViewModel, B : ViewDataBinding> : Fragment()
     abstract val layoutRes: Int
     abstract val viewModel: T
 
-    abstract fun initBinding()
+    open fun initBinding() {}
     abstract fun observeViewModel()
     abstract fun viewCreated(view: View, savedInstanceState: Bundle?)
 

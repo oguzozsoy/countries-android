@@ -114,8 +114,4 @@ class CountriesFragment : BaseFragment<CountriesViewModel, FragmentCountriesBind
             }
         }
     }
-
-    override fun initBinding() {
-
-    }
 }

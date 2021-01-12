@@ -12,7 +12,7 @@ import com.wooz.countries.domain.entity.Language
  */
 class CountryTypeConverters {
     @TypeConverter
-    fun fromDoubleToString(value: Double): String?{
+    fun fromDoubleToString(value: Double): String{
         return value.toString()
     }
 
@@ -27,17 +27,15 @@ class CountryTypeConverters {
 
     @TypeConverter
     fun fromStringToStringList(value: String?): List<String>? {
-        return value?.let{
-            it.split(",")
-        }
+        return value?.split(",")
     }
 
     @TypeConverter
-    fun fromStringListToString(value: List<String>?): String? {
+    fun fromStringListToString(value: List<String>?): String {
         return if(value.isNullOrEmpty()){
             ""
         }else{
-            value?.joinToString(",")
+            value.joinToString(",")
         }
     }
 

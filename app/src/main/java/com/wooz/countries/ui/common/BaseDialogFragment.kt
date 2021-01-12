@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.wooz.countries.R
@@ -23,9 +24,9 @@ abstract class BaseDialogFragment<T : BaseViewModel, B : ViewBinding> : DialogFr
     abstract val layoutRes: Int
     abstract val viewModel: T
 
+    open fun initBinding() {}
     abstract fun observeViewModel()
     abstract fun viewCreated(view: View, savedInstanceState: Bundle?)
-    abstract fun setBinding(inflater: LayoutInflater, container: ViewGroup?): B
 
     private var _binding: B? = null
     val binding get() = _binding!!
@@ -49,7 +50,8 @@ abstract class BaseDialogFragment<T : BaseViewModel, B : ViewBinding> : DialogFr
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this._binding = this.setBinding(inflater, container)
+        this._binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
+        initBinding()
         return binding.root
     }
 
@@ -66,7 +68,7 @@ abstract class BaseDialogFragment<T : BaseViewModel, B : ViewBinding> : DialogFr
     }
 
     private fun observeLoadingAndError() {
-        viewModel.loadingErrorState.observe(viewLifecycleOwner,  {
+        viewModel.loadingErrorState.observe(viewLifecycleOwner, {
             when (it) {
                 is ResultData.Loading -> {
                     showLoading()

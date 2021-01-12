@@ -17,4 +17,5 @@
     <string name="currencies">Currencies: %s - %s(%s)</string>
     <string name="favorite">Favorite</string>
     <string name="delete">Delete</string>
+    <string name="flag">flag</string>
 </resources>
