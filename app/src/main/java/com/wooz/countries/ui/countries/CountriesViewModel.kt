@@ -9,8 +9,8 @@ import com.wooz.countries.domain.entity.ResultData
 import com.wooz.countries.domain.usercase.GetAllCountriesUseCase
 import com.wooz.countries.ui.common.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * @author wooz

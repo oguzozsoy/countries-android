@@ -3,6 +3,7 @@ package com.wooz.countries.ui.details
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.wooz.countries.domain.entity.Country
 import com.wooz.countries.domain.entity.CountryDetails
@@ -15,6 +16,7 @@ import com.wooz.countries.ui.common.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 
 /**
  * @author wooz
@@ -47,7 +49,7 @@ class CountryDetailsViewModel @ViewModelInject constructor(
 
     fun fetchCountry(code: String) {
         viewModelScope.launch {
-            getCountryByCodeUseCase.invoke(code).collect{
+            getCountryByCodeUseCase.invoke(code).collect {
                 _country.postValue(it)
             }
         }
@@ -60,4 +62,19 @@ class CountryDetailsViewModel @ViewModelInject constructor(
     fun deleteCountry(country: Country) = viewModelScope.launch {
         deleteCountryUseCase.invoke(country)
     }
+
+    val formattedPopulation = Transformations.map(countryDetails) {
+        it.toData()?.let { details ->
+            NumberFormat.getNumberInstance().format(details.population)
+        }
+    }
+
+    val formattedArea = Transformations.map(countryDetails) {
+        it.toData()?.let { details ->
+            NumberFormat.getNumberInstance().format(details.area)
+        }
+    }
+
+
+
 }

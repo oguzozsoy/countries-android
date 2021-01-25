@@ -1,10 +1,10 @@
 package com.wooz.countries.di
 
 import com.google.gson.GsonBuilder
+import com.wooz.countries.data.framework.remote.CountryService
 import com.wooz.countries.data.framework.remote.common.ApiResponseCallAdapterFactory
 import com.wooz.countries.data.framework.remote.common.DeserializationExclusionStrategy
 import com.wooz.countries.data.framework.remote.common.SerializationExclusionStrategy
-import com.wooz.countries.data.framework.remote.CountryService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

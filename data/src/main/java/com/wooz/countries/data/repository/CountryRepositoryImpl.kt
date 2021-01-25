@@ -9,8 +9,9 @@ import com.wooz.countries.domain.entity.Country
 import com.wooz.countries.domain.entity.CountryDetails
 import com.wooz.countries.domain.entity.ResultData
 import com.wooz.countries.domain.repository.CountryRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -25,10 +26,10 @@ class CountryRepositoryImpl @Inject constructor(
     private val countryDetailsMapper: Mapper<CountryDetails, CountryDetailsDto>
 ) : CountryRepository {
 
-    companion object{
+    companion object {
         private const val TAG = "CountryRepositoryImpl"
     }
-    
+
     override fun getAllCountries(): Flow<ResultData<List<Country>>> = flow {
         object : NetworkBoundResource<List<CountryDto>>() {
             override suspend fun saveCallResult(item: List<CountryDto>) {
@@ -69,7 +70,9 @@ class CountryRepositoryImpl @Inject constructor(
             }
 
             override fun shouldFetch(data: CountryDetailsDto?): Boolean {
-                return data == null || System.currentTimeMillis() - data.updatedAt > TimeUnit.DAYS.toMillis(30)
+                return data == null || System.currentTimeMillis() - data.updatedAt > TimeUnit.DAYS.toMillis(
+                    30
+                )
             }
 
             override fun loadFromDb(): Flow<CountryDetailsDto> {
@@ -95,13 +98,13 @@ class CountryRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getCountryByCode(code: String): Flow<ResultData<Country>> = flow{
+    override fun getCountryByCode(code: String): Flow<ResultData<Country>> = flow {
         emit(ResultData.Loading())
         val country = localDataSource.getCountryByCode(code)
-        country.collect{
-            if(it == null){
+        country.collect {
+            if (it == null) {
                 emit(ResultData.Failed("Country not found"))
-            }else{
+            } else {
                 emit(ResultData.Success(countryMapper.mapToEntity(it)))
             }
         }
